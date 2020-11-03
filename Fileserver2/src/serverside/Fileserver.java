@@ -21,24 +21,8 @@ public class Fileserver {
 		while(true) {
 			// Listens for a connection to be made to this socket and accepts it. The method blocks until a connection is made.
 			Socket sock = servsock.accept();
-			
-			// Open input-stream from the file to be transmitted
-			BufferedInputStream fromFile = new BufferedInputStream(new FileInputStream(filename1));
-			
-			// Open output-stream for file to be transmitted to
-			BufferedOutputStream toClient = new BufferedOutputStream(sock.getOutputStream());
-			
-			// Filetransfer
-			int data = -1;
-			while ((data = fromFile.read()) != -1) {
-				toClient.write(data);
-			}
-			// Flushes this output stream and forces any buffered output bytes to be written out.
-			toClient.flush();
-			
-			// Close the socket when it's done
-			System.out.println("File was transmitted to " + sock.getInetAddress());
-			sock.close();
+			ServiceThread st = new ServiceThread(sock, filename1);
+			st.start();
 		}
 	}
 	
